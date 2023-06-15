@@ -1,0 +1,15 @@
+SE SITUE, 11 FESTIVAL, 0N ADRESSE
+ADRESSE: adresse_id, localisation
+DEBUTE, 11 TRAJET, 0N ADRESSE
+
+FESTIVAL: festival_id, date_debut, date_fin
+ARRIVE, 11 TRAJET, 0N ADRESSE
+TRAJET: trajet_id
+
+SOUHAITE ALLER, 0N FESTIVAL, 0N UTILISATEUR
+UTILISATEUR: user_id, prenom, nom, mail, password, role
+EMPRUNTE, 0N TRAJET, 0N UTILISATEUR : id_reservation
+
+VEHICULE: car_id, modele, plaque, couleur, nb_places
+POSSEDE, 0N VEHICULE, 11 UTILISATEUR
+:
