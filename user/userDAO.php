@@ -84,6 +84,31 @@ class UserDAO
         return null;
     }
 
+    public function getAllUsers()
+    {
+        $db = $this->database->getPDO();
+
+        $sql = 'SELECT * FROM users';
+        $statement = $db->prepare($sql);
+
+        $statement->execute();
+
+        $usersData = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $db = null;
+
+        $users = [];
+
+        foreach ($usersData as $userData) {
+            $user = new User($userData['prenom'], $userData['nom'], $userData['mail'], $userData['password'], $userData['isAdmin']);
+            $user->setId($userData['user_id']);
+            $users[] = $user;
+        }
+
+        return $users;
+    }
+
+
     public function updateUser($user)
     {
         $db = $this->database->getPDO();
@@ -101,5 +126,27 @@ class UserDAO
         ]);
 
         $db = null;
+    }
+
+    public function deleteUser(User $user) {
+        $query = "DELETE FROM users WHERE user_id = :id"; 
+        $statement = $this->database->prepare($query);
+        $statement->bindValue(':id', $user->getId());
+        $statement->execute();
+    }
+
+    public function getUserCount()
+    {
+        $db = $this->database->getPDO();
+
+        $sql = 'SELECT COUNT(*) AS count FROM users';
+        $statement = $db->prepare($sql);
+        $statement->execute();
+
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        $db = null;
+
+        return $result['count'];
     }
 }
