@@ -26,10 +26,10 @@ PRIMARY KEY (`vechicule_id`))
 CREATE TABLE `base de données`.`annonces` 
 ( `annonce_id` INT NOT NULL AUTO_INCREMENT , 
 FOREIGN KEY(`driver_id`) REFERENCES (`user_id`), 
-`date` VARCHAR(128) NOT NULL,
+`publication_date` DATE NOT NULL,
+FOREIGN KEY(`festival_id`) REFERENCES (`festival_id`)
 `isEnabled` BOOL NOT NULL,  
 PRIMARY KEY (`annonce_id`)) 
-
 
 
 -- Table Festivals
@@ -41,8 +41,7 @@ FOREIGN KEY(`lieu_id`) REFERENCES (`lieu_id`),
 PRIMARY KEY (`festival_id`)) 
 
 
+-- Table de photos
 CREATE TABLE `base de données`.`photos`
 (`photo_id` INT NOT NULL AUTO_INCREMENT,
 FORGEIGN KEY(`festival_id`) REFERENCES (`festival_id`),)
-
-
