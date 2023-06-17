@@ -21,7 +21,7 @@
 
         // Si c'est un admin, on affiche le lien vers le dashboard
         if ($user->isAdmin()) {
-            echo '<a href="user/logout.php">Déconnexion</a> <a href="user/account.php">Mon Compte</a> <a href="dashboard.php">Dashboard</a>';
+            echo '<a href="user/logout.php">Déconnexion</a> <a href="user/account.php">Mon Compte</a> <a href="dashboard/dashboard.php">Dashboard</a>';
         } else {
             echo '<a href="user/logout.php">Déconnexion</a> <a href="user/account.php">Mon Compte</a>';
         }

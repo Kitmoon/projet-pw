@@ -48,7 +48,6 @@ CREATE TABLE `festicar`.`trajets` (
   `festival_id` INT NOT NULL,
   `driver_id` INT NOT NULL,
   `date_depart` DATETIME NOT NULL,
-  `date_arrivee` DATETIME,
   `lieu_depart` INT NOT NULL, 
   `lieu_arrivee` INT NOT NULL,
   `prix` DECIMAL(10, 2) NOT NULL,
