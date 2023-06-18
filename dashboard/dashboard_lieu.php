@@ -10,7 +10,6 @@ $lieuDAO = new LieuDAO($database);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Gestion des lieux
     if (isset($_POST['submit_lieu'])) { // Modifier lieu
-        // Récupération des données
         $lieuId = $_POST['lieu_id'];
         $lieuNom = $_POST['lieu_nom'];
         $lieuAdresse = $_POST['lieu_adresse'];
@@ -24,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['submit_add_lieu'])) { // Ajouter lieu
-        // Récupération des données pour l'ajout de lieu
         $lieuNom = $_POST['new_lieu_nom'];
         $lieuAdresse = $_POST['new_lieu_adresse'];
         $lieuVille = $_POST['new_lieu_ville'];
@@ -37,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['delete_lieu_id'])) { // Supprimer lieu
         $lieuIds = $_POST['delete_lieu_id'];
-        // Suppression des lieux
         foreach ($lieuIds as $lieuId) {
             $lieu = $lieuDAO->getLieuById($lieuId);
             if ($lieu) {
@@ -47,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Récupération de tous les lieux
 $lieux = $lieuDAO->getAllLieux();
 
 ?>

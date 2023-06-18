@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <h1>Connexion</h1>
+    <a href="../home.php">Accueil</a>
 
     <?php if (isset($errorMessage)): ?>
         <p class="error">

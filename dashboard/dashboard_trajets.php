@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trajetDAO->createTrajet($trajet);
     }
 
-    if (isset($_POST['delete_festival_id'])) { // Supprimer trajet
+    if (isset($_POST['delete_trajet_id'])) { // Supprimer trajet
         $trajetId = $_POST['trajet_id'];
 
         $trajet = $trajetDAO->getTrajetById($trajetId);
@@ -122,7 +122,7 @@ $festivals = $festivalDAO->getAllFestivals();
                             <?php } ?>
                         </select>
                     </td>
-                    <td><input type="text" name="date_depart" value="<?= $trajet->getDateDepart(); ?>"></td>
+                    <td><input type="datetime" name="date_depart" value="<?= $trajet->getDateDepart(); ?>"></td>
                     <td>
                         <select name="lieu_depart">
                             <?php foreach ($lieux as $lieu) { ?>
@@ -147,7 +147,7 @@ $festivals = $festivalDAO->getAllFestivals();
                     <td><textarea name="description"><?= $trajet->getDescription(); ?></textarea></td>
                     <td>
                         <input type="submit" name="submit_trajet" value="Modifier">
-                        <input type="submit" name="delete_festival_id[]" value="Supprimer">
+                        <input type="submit" name="delete_trajet_id[]" value="Supprimer">
                     </td>
                 </form>
             </tr>
@@ -169,7 +169,7 @@ $festivals = $festivalDAO->getAllFestivals();
                         <?php } ?>
                     </select>
                 </td>
-                <td><input type="text" name="new_date_depart"></td>
+                <td><input type="datetime" name="new_date_depart"></td>
                 <td>
                     <select name="new_lieu_depart">
                         <?php foreach ($lieux as $lieu) { ?>

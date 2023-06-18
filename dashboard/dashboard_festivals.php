@@ -95,8 +95,8 @@ $lieux = $lieuDAO->getAllLieux();
                             <?php } ?>
                         </select>
                     </td>
-                    <td><input type="text" name="festival_date_debut" value="<?= $festival->getDateDebut(); ?>"></td>
-                    <td><input type="text" name="festival_date_fin" value="<?= $festival->getDateFin(); ?>"></td>
+                    <td><input type="date" name="festival_date_debut" value="<?= $festival->getDateDebut(); ?>"></td>
+                    <td><input type="date" name="festival_date_fin" value="<?= $festival->getDateFin(); ?>"></td>
                     <td>
                         <input type="hidden" name="festival_id" value="<?= $festival->getId(); ?>">
                         <input type="submit" name="submit_festival" value="Modifier">
@@ -118,8 +118,8 @@ $lieux = $lieuDAO->getAllLieux();
                         <?php } ?>
                     </select>
                 </td>
-                <td><input type="text" name="new_festival_date_debut"></td>
-                <td><input type="text" name="new_festival_date_fin"></td>
+                <td><input type="date" name="new_festival_date_debut"></td>
+                <td><input type="date" name="new_festival_date_fin"></td>
                 <td>
                     <input type="submit" name="submit_add_festival" value="Ajouter">
                 </td>
