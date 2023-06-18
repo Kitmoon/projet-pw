@@ -79,115 +79,110 @@ $festivals = $festivalDAO->getAllFestivals();
 
 <head>
     <title>Dashboard des demandes</title>
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-    </style>
 </head>
 
 <body>
     <?php include_once('dashboard_header.php'); ?>
-    <h2>Gestion des demandes</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Auteur</th>
-            <th>Lieu</th>
-            <th>Festival</th>
-            <th>Date de publication</th>
-            <th>isEnabled</th>
-            <th>Date départ</th>
-            <th>Date retour</th>
-            <th>Actions</th>
-        </tr>
-        <?php foreach ($demandes as $demande) { ?>
+    <main>
+        <h2>Gestion des demandes</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Auteur</th>
+                <th>Lieu</th>
+                <th>Festival</th>
+                <th>Date de publication</th>
+                <th>isEnabled</th>
+                <th>Date départ</th>
+                <th>Date retour</th>
+                <th>Actions</th>
+            </tr>
+            <?php foreach ($demandes as $demande) { ?>
+                <tr>
+                    <form method="post" action="">
+                        <input type="hidden" name="demande_id" value="<?= $demande->getId(); ?>">
+                        <td>
+                            <?= $demande->getId(); ?>
+                        </td>
+                        <td>
+                            <select name="author_id">
+                                <?php foreach ($users as $user) { ?>
+                                    <option value="<?= $user->getId(); ?>" <?php if ($user->getId() == $demande->getAuthorId())
+                                          echo 'selected'; ?>>
+                                        <?= $user->getPrenom(); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="lieu_id">
+                                <?php foreach ($lieux as $lieu) { ?>
+                                    <option value="<?= $lieu->getId(); ?>" <?php if ($lieu->getId() == $demande->getLieuId())
+                                          echo 'selected'; ?>>
+                                        <?= $lieu->getAdresse(); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="festival_id">
+                                <?php foreach ($festivals as $festival) { ?>
+                                    <option value="<?= $festival->getId(); ?>" <?php if ($festival->getId() == $demande->getFestivalId())
+                                          echo 'selected'; ?>>
+                                        <?= $festival->getNom(); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td><input type="date" name="publication_date" value="<?= $demande->getPublicationDate(); ?>"></td>
+                        <td><input type="checkbox" name="isEnabled" <?= $demande->isEnabled() ? 'checked' : ''; ?>></td>
+                        <td><input type="date" name="date_depart" value="<?= $demande->getDateDepart(); ?>"></td>
+                        <td><input type="date" name="date_retour" value="<?= $demande->getDateRetour(); ?>"></td>
+                        <td>
+                            <input type="submit" name="submit_demande" value="Modifier">
+                            <input type="submit" name="delete_demande_id[]" value="Supprimer">
+                        </td>
+                    </form>
+                </tr>
+            <?php } ?>
             <tr>
                 <form method="post" action="">
-                    <input type="hidden" name="demande_id" value="<?= $demande->getId(); ?>">
+                    <td></td>
                     <td>
-                        <?= $demande->getId(); ?>
-                    </td>
-                    <td>
-                        <select name="author_id">
+                        <select name="new_author_id">
                             <?php foreach ($users as $user) { ?>
-                                <option value="<?= $user->getId(); ?>" <?php if ($user->getId() == $demande->getAuthorId())
-                                      echo 'selected'; ?>>
-                                    <?= $user->getPrenom(); ?>
-                                </option>
+                                <option value="<?= $user->getId(); ?>"><?= $user->getPrenom(); ?></option>
                             <?php } ?>
                         </select>
                     </td>
                     <td>
-                        <select name="lieu_id">
+                        <select name="new_lieu_id">
                             <?php foreach ($lieux as $lieu) { ?>
-                                <option value="<?= $lieu->getId(); ?>" <?php if ($lieu->getId() == $demande->getLieuId())
-                                      echo 'selected'; ?>>
-                                    <?= $lieu->getAdresse(); ?>
-                                </option>
+                                <option value="<?= $lieu->getId(); ?>"><?= $lieu->getAdresse(); ?></option>
                             <?php } ?>
                         </select>
                     </td>
                     <td>
-                        <select name="festival_id">
+                        <select name="new_festival_id">
                             <?php foreach ($festivals as $festival) { ?>
-                                <option value="<?= $festival->getId(); ?>" <?php if ($festival->getId() == $demande->getFestivalId())
-                                      echo 'selected'; ?>>
-                                    <?= $festival->getNom(); ?>
-                                </option>
+                                <option value="<?= $festival->getId(); ?>"><?= $festival->getNom(); ?></option>
                             <?php } ?>
                         </select>
                     </td>
-                    <td><input type="date" name="publication_date" value="<?= $demande->getPublicationDate(); ?>"></td>
-                    <td><input type="checkbox" name="isEnabled" <?= $demande->isEnabled() ? 'checked' : ''; ?>></td>
-                    <td><input type="date" name="date_depart" value="<?= $demande->getDateDepart(); ?>"></td>
-                    <td><input type="date" name="date_retour" value="<?= $demande->getDateRetour(); ?>"></td>
+                    <td><input type="date" name="new_publication_date"></td>
                     <td>
-                        <input type="submit" name="submit_demande" value="Modifier">
-                        <input type="submit" name="delete_demande_id[]" value="Supprimer">
+                        <input type="checkbox" name="new_isEnabled">
+                    </td>
+
+                    <td><input type="date" name="new_date_depart"></td>
+                    <td><input type="date" name="new_date_retour"></td>
+                    <td>
+                        <input type="submit" name="submit_add_demande" value="Ajouter">
                     </td>
                 </form>
             </tr>
-        <?php } ?>
-        <tr>
-            <form method="post" action="">
-                <td></td>
-                <td>
-                    <select name="new_author_id">
-                        <?php foreach ($users as $user) { ?>
-                            <option value="<?= $user->getId(); ?>"><?= $user->getPrenom(); ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
-                <td>
-                    <select name="new_lieu_id">
-                        <?php foreach ($lieux as $lieu) { ?>
-                            <option value="<?= $lieu->getId(); ?>"><?= $lieu->getAdresse(); ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
-                <td>
-                    <select name="new_festival_id">
-                        <?php foreach ($festivals as $festival) { ?>
-                            <option value="<?= $festival->getId(); ?>"><?= $festival->getNom(); ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
-                <td><input type="date" name="new_publication_date"></td>
-                <td>
-                    <input type="checkbox" name="new_isEnabled">
-                </td>
-                
-                <td><input type="date" name="new_date_depart"></td>
-                    <td><input type="date" name="new_date_retour"></td>
-                <td>
-                    <input type="submit" name="submit_add_demande" value="Ajouter">
-                </td>
-            </form>
-        </tr>
-    </table>
+        </table>
+    </main>
 </body>
 
 </html>

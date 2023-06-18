@@ -58,74 +58,69 @@ $lieux = $lieuDAO->getAllLieux();
 
 <head>
     <meta charset="utf-8">
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-    </style>
 </head>
 
 <body>
     <?php include_once('dashboard_header.php'); ?>
-    <h2>Festivals</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Lieu</th>
-            <th>Date Début</th>
-            <th>Date Fin</th>
-            <th>Action</th>
-        </tr>
-        <?php foreach ($festivals as $festival) { ?>
+    <main>
+        <h2>Festivals</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Lieu</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Action</th>
+            </tr>
+            <?php foreach ($festivals as $festival) { ?>
+                <tr>
+                    <form method="post" action="">
+                        <td>
+                            <?= $festival->getId(); ?>
+                        </td>
+                        <td><input type="text" name="festival_nom" value="<?= $festival->getNom(); ?>"></td>
+                        <td>
+                            <select name="festival_lieu_id">
+                                <?php foreach ($lieux as $lieu) { ?>
+                                    <option value="<?= $lieu->getId(); ?>" <?= $lieu->getId() == $festival->getLieuId() ? 'selected' : ''; ?>>
+                                        <?= $lieu->getNom(); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td><input type="date" name="festival_date_debut" value="<?= $festival->getDateDebut(); ?>"></td>
+                        <td><input type="date" name="festival_date_fin" value="<?= $festival->getDateFin(); ?>"></td>
+                        <td>
+                            <input type="hidden" name="festival_id" value="<?= $festival->getId(); ?>">
+                            <input type="submit" name="submit_festival" value="Modifier">
+                            <button type="submit" name="delete_festival_id[]"
+                                value="<?= $festival->getId(); ?>">Supprimer</button>
+                        </td>
+                    </form>
+                </tr>
+            <?php } ?>
+
             <tr>
                 <form method="post" action="">
+                    <td></td>
+                    <td><input type="text" name="new_festival_nom"></td>
                     <td>
-                        <?= $festival->getId(); ?>
-                    </td>
-                    <td><input type="text" name="festival_nom" value="<?= $festival->getNom(); ?>"></td>
-                    <td>
-                        <select name="festival_lieu_id">
+                        <select name="new_festival_lieu_id">
                             <?php foreach ($lieux as $lieu) { ?>
-                                <option value="<?= $lieu->getId(); ?>" <?= $lieu->getId() == $festival->getLieuId() ? 'selected' : ''; ?>>
-                                    <?= $lieu->getNom(); ?>
-                                </option>
+                                <option value="<?= $lieu->getId(); ?>"><?= $lieu->getNom(); ?></option>
                             <?php } ?>
                         </select>
                     </td>
-                    <td><input type="date" name="festival_date_debut" value="<?= $festival->getDateDebut(); ?>"></td>
-                    <td><input type="date" name="festival_date_fin" value="<?= $festival->getDateFin(); ?>"></td>
+                    <td><input type="date" name="new_festival_date_debut"></td>
+                    <td><input type="date" name="new_festival_date_fin"></td>
                     <td>
-                        <input type="hidden" name="festival_id" value="<?= $festival->getId(); ?>">
-                        <input type="submit" name="submit_festival" value="Modifier">
-                        <button type="submit" name="delete_festival_id[]"
-                            value="<?= $festival->getId(); ?>">Supprimer</button>
+                        <input type="submit" name="submit_add_festival" value="Ajouter">
                     </td>
                 </form>
             </tr>
-        <?php } ?>
-
-        <tr>
-            <form method="post" action="">
-                <td></td>
-                <td><input type="text" name="new_festival_nom"></td>
-                <td>
-                    <select name="new_festival_lieu_id">
-                        <?php foreach ($lieux as $lieu) { ?>
-                            <option value="<?= $lieu->getId(); ?>"><?= $lieu->getNom(); ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
-                <td><input type="date" name="new_festival_date_debut"></td>
-                <td><input type="date" name="new_festival_date_fin"></td>
-                <td>
-                    <input type="submit" name="submit_add_festival" value="Ajouter">
-                </td>
-            </form>
-        </tr>
-    </table>
+        </table>
+    </main>
 </body>
 
 </html>

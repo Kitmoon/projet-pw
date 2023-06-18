@@ -54,57 +54,52 @@ $lieux = $lieuDAO->getAllLieux();
 
 <head>
     <meta charset="utf-8">
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-    </style>
 </head>
 
 <body>
     <?php include_once('dashboard_header.php'); ?>
-    <h2>Lieux</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Adresse</th>
-            <th>Ville</th>
-            <th>Code Postal</th>
-            <th>Action</th>
-        </tr>
-        <?php foreach ($lieux as $lieu) { ?>
+    <main>
+        <h2>Lieux</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Action</th>
+            </tr>
+            <?php foreach ($lieux as $lieu) { ?>
+                <tr>
+                    <form method="post" action="">
+                        <td>
+                            <?= $lieu->getId(); ?>
+                        </td>
+                        <td><input type="text" name="lieu_nom" value="<?= $lieu->getNom(); ?>"></td>
+                        <td><input type="text" name="lieu_adresse" value="<?= $lieu->getAdresse(); ?>"></td>
+                        <td><input type="text" name="lieu_ville" value="<?= $lieu->getVille(); ?>"></td>
+                        <td><input type="text" name="lieu_code_postal" value="<?= $lieu->getCodePostal(); ?>"></td>
+                        <td>
+                            <input type="hidden" name="lieu_id" value="<?= $lieu->getId(); ?>">
+                            <input type="submit" name="submit_lieu" value="Modifier">
+                            <button type="submit" name="delete_lieu_id[]" value="<?= $lieu->getId(); ?>">Supprimer</button>
+                        </td>
+                    </form>
+                </tr>
+            <?php } ?>
+
             <tr>
                 <form method="post" action="">
+                    <td></td>
+                    <td><input type="text" name="new_lieu_nom"></td>
+                    <td><input type="text" name="new_lieu_adresse"></td>
+                    <td><input type="text" name="new_lieu_ville"></td>
+                    <td><input type="text" name="new_lieu_code_postal"></td>
                     <td>
-                        <?= $lieu->getId(); ?>
-                    </td>
-                    <td><input type="text" name="lieu_nom" value="<?= $lieu->getNom(); ?>"></td>
-                    <td><input type="text" name="lieu_adresse" value="<?= $lieu->getAdresse(); ?>"></td>
-                    <td><input type="text" name="lieu_ville" value="<?= $lieu->getVille(); ?>"></td>
-                    <td><input type="text" name="lieu_code_postal" value="<?= $lieu->getCodePostal(); ?>"></td>
-                    <td>
-                        <input type="hidden" name="lieu_id" value="<?= $lieu->getId(); ?>">
-                        <input type="submit" name="submit_lieu" value="Modifier">
-                        <button type="submit" name="delete_lieu_id[]" value="<?= $lieu->getId(); ?>">Supprimer</button>
+                        <input type="submit" name="submit_add_lieu" value="Ajouter">
                     </td>
                 </form>
             </tr>
-        <?php } ?>
-
-        <tr>
-            <form method="post" action="">
-                <td></td>
-                <td><input type="text" name="new_lieu_nom"></td>
-                <td><input type="text" name="new_lieu_adresse"></td>
-                <td><input type="text" name="new_lieu_ville"></td>
-                <td><input type="text" name="new_lieu_code_postal"></td>
-                <td>
-                    <input type="submit" name="submit_add_lieu" value="Ajouter">
-                </td>
-            </form>
-        </tr>
-    </table>
+        </table>
+    </main>
 </body>

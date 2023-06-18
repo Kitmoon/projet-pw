@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+<main>
     <h1>Inscription</h1>
     <a href="./home.php">Accueil</a>
 
@@ -96,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <button type="submit">S'inscrire</button>
     </form>
+    </main>
 </body>
 
 </html>

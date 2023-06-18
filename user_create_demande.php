@@ -80,14 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         $dateDepart = $_POST['new_date_depart'];
+        $dateRetour = $_POST['new_date_retour'];
 
         $publicationDate = $_POST['new_publication_date'];
-        $voiture = $_POST['new_voiture'];
-        $nbPlaces = $_POST['new_nb_places'];
-        
-
-        $prix = $_POST['new_prix'];
-        $description = $_POST['new_description'];
 
 
 
@@ -106,41 +101,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <?php include_once('./header.php'); ?>
-    <h2>Ajouter une demande</h2>
-    <form method="post" action="">
-        <input type="hidden" name="new_author_id" value="<?= $_SESSION['user_id']; ?>">
+    <main>
+        <h2>Ajouter une demande</h2>
+        <form method="post" action="">
+            <input type="hidden" name="new_author_id" value="<?= $_SESSION['user_id']; ?>">
 
-        <label for="new_adresse_depart">Adresse : </label>
-        <input type="text" name="new_adresse_depart" id="new_adresse_depart"><br>
+            <label for="new_adresse_depart">Adresse : </label>
+            <input type="text" name="new_adresse_depart" id="new_adresse_depart"><br>
 
-        <label for="new_ville_depart">Ville : </label>
-        <input type="text" name="new_ville_depart" id="new_ville_depart"><br>
+            <label for="new_ville_depart">Ville : </label>
+            <input type="text" name="new_ville_depart" id="new_ville_depart"><br>
 
-        <label for="new_code_postal_depart">Code postal : </label>
-        <input type="text" name="new_code_postal_depart" id="new_code_postal_depart"><br>
+            <label for="new_code_postal_depart">Code postal : </label>
+            <input type="text" name="new_code_postal_depart" id="new_code_postal_depart"><br>
 
-        <label for="new_festival_id">Festival : </label>
-        <select name="new_festival_id" id="new_festival_id">
-            <?php foreach ($festivals as $festival) { ?>
-                <option value="<?= $festival->getId(); ?>"><?= $festival->getNom(); ?></option>
-            <?php } ?>
-        </select><br>
+            <label for="new_festival_id">Festival : </label>
+            <select name="new_festival_id" id="new_festival_id">
+                <?php foreach ($festivals as $festival) { ?>
+                    <option value="<?= $festival->getId(); ?>"><?= $festival->getNom(); ?></option>
+                <?php } ?>
+            </select><br>
 
-        <label for="new_date_depart">Date de départ : </label>
-        <input type="date" name="new_date_depart" id="new_date_depart"><br>
+            <label for="new_date_depart">Date de départ : </label>
+            <input type="date" name="new_date_depart" id="new_date_depart"><br>
 
-        <input type="hidden" name="new_publication_date" id="new_publication_date" value="<?= date("Y-m-d") ?>;">
+            <input type="hidden" name="new_publication_date" id="new_publication_date" value="<?= date("Y-m-d") ?>;">
 
 
 
-        <label for="new_voiture">Véhicule : </label>
-        <input type="text" name="new_voiture" id="new_voiture"><br>
+            <label for="new_voiture">Véhicule : </label>
+            <input type="text" name="new_voiture" id="new_voiture"><br>
 
-        <label for="new_nb_places">Nombre de places : </label>
-        <input type="number" name="new_nb_places" id="new_nb_places"><br>
+            <label for="new_nb_places">Nombre de places : </label>
+            <input type="number" name="new_nb_places" id="new_nb_places"><br>
 
-        <input type="submit" name="submit_add_demande" value="Ajouter">
-    </form>
+            <input type="submit" name="submit_add_demande" value="Ajouter">
+        </form>
+    </main>
 </body>
 
 </html>

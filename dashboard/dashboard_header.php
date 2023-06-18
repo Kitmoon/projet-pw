@@ -24,28 +24,18 @@ Session_start();
 <html>
 <head>
     <title>Dashboard</title>
-    <style>
-        /* Styles CSS pour le header */
-        header {
-            padding: 10px;
-            text-align: center;
-        }
+    <link rel="icon" href="https://via.placeholder.com/70x70">
+    <link rel="stylesheet" href="../mvp.css">
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        header p {
-            margin: 0;
-            font-size: 14px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="description" content="My description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <header>
     <h1>Dashboard</h1>
     <a href="../home.php">Accueil</a>
+        <a href="dashboard.php">Dashboard</a>
         <a href="dashboard_users.php">Utilisateurs</a>
         <a href="dashboard_annonces.php">Annonces</a>
         <a href="dashboard_demandes.php">Demandes</a>

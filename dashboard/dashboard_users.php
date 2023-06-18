@@ -53,17 +53,11 @@ $users = $userDAO->getAllUsers();
 
 <head>
     <meta charset="utf-8">
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-    </style>
 </head>
 
 <body>
     <?php include_once('dashboard_header.php'); ?>
+    <main>
     <h2>Utilisateurs</h2>
     <table>
         <tr>
@@ -109,6 +103,7 @@ $users = $userDAO->getAllUsers();
             </form>
         </tr>
     </table>
+    </main>
 </body>
 
 </html>

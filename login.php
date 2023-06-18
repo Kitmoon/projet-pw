@@ -53,25 +53,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <?php include_once('./header.php'); ?>
-    <h1>Connexion</h1>
+    <main>
+        <h1>Connexion</h1>
 
-    <?php if (isset($errorMessage)): ?>
-        <p class="error">
-            <?php echo $errorMessage; ?>
-        </p>
-    <?php endif; ?>
+        <?php if (isset($errorMessage)): ?>
+            <p class="error">
+                <?php echo $errorMessage; ?>
+            </p>
+        <?php endif; ?>
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-        <div>
-            <label for="mail">Adresse e-mail:</label>
-            <input type="email" id="mail" name="mail" required>
-        </div>
-        <div>
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Se connecter</button>
-    </form>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+            <div>
+                <label for="mail">Adresse e-mail:</label>
+                <input type="email" id="mail" name="mail" required>
+            </div>
+            <div>
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Se connecter</button>
+        </form>
+    </main>
 </body>
 
 </html>

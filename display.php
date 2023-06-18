@@ -30,7 +30,6 @@ $festivals = $festivalDAO->getAllFestivals();
 $lieux = $lieuDAO->getAllLieux();
 $trajets = $trajetDAO->getAllTrajets();
 
-
 function displayAnnonces(array $annonces, string $style)
 {
     $output = '';
@@ -113,12 +112,14 @@ function displayTrajet(Trajet $trajet)
 
     foreach ($lieux as $lieu) {
         if ($lieu->getId() == $trajet->getLieuDepart()) {
+            debug_to_console("Lieu départ trouvé : " . $lieu->getId());
             $output = $output . displayLieu($lieu);
         }
     }
     $output = $output . " -> ";
     foreach ($lieux as $lieu) {
         if ($lieu->getId() == $trajet->getLieuArrivee()) {
+            debug_to_console("Lieu arrivée trouvé : " . $lieu->getId());
             $output = $output . displayLieu($lieu);
         }
     }
@@ -137,4 +138,20 @@ function displayFestival(Festival $festival)
     $output = "";
     $output = $festival->getNom();
     return $output;
+}
+
+
+
+
+
+
+
+
+function debug_to_console($data)
+{
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('" . $output . "');</script>";
 }

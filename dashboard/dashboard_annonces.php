@@ -79,17 +79,17 @@ $festivals = $festivalDAO->getAllFestivals();
 
 <head>
     <title>Dashboard des annonces</title>
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-    </style>
+    <link rel="icon" href="https://via.placeholder.com/70x70">
+    <link rel="stylesheet" href="../mvp.css">
+
+    <meta charset="utf-8">
+    <meta name="description" content="My description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
     <?php include_once('dashboard_header.php'); ?>
+    <main>
     <h2>Gestion des annonces</h2>
     <table>
         <tr>
@@ -187,6 +187,7 @@ $festivals = $festivalDAO->getAllFestivals();
             </form>
         </tr>
     </table>
+    </main>
 </body>
 
 </html>

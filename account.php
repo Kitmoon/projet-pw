@@ -42,35 +42,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>FestiCar - Mon Compte</title>
 </head>
+
 <body>
     <?php include_once('./header.php'); ?>
-    <h1>Mon Compte</h1>
-    <?php if (!empty($error)) : ?>
-    <p><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
-    <form method="POST" action="account.php">
-        <div>
-            <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($user->getNom()); ?>">
-        </div>
-        <div>
-            <label for="prenom">Prénom :</label>
-            <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($user->getPrenom()); ?>">
-        </div>
-        <div>
-            <label for="mail">mail :</label>
-            <input type="mail" id="mail" name="mail" value="<?php echo htmlspecialchars($user->getMail()); ?>">
-        </div>
-        <div>
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <div>
-            <button type="submit">Enregistrer</button>
-        </div>
-    </form>
+    <main>
+        <h1>Mon Compte</h1>
+        <?php if (!empty($error)): ?>
+            <p>
+                <?php echo htmlspecialchars($error); ?>
+            </p>
+        <?php endif; ?>
+        <form method="POST" action="account.php">
+            <div>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($user->getNom()); ?>">
+            </div>
+            <div>
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom"
+                    value="<?php echo htmlspecialchars($user->getPrenom()); ?>">
+            </div>
+            <div>
+                <label for="mail">mail :</label>
+                <input type="mail" id="mail" name="mail" value="<?php echo htmlspecialchars($user->getMail()); ?>">
+            </div>
+            <div>
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div>
+                <button type="submit">Enregistrer</button>
+            </div>
+        </form>
+    </main>
 </body>
+
 </html>
