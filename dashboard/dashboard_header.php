@@ -1,3 +1,25 @@
+<?php
+Session_start();
+
+    if (empty($_SESSION)) {
+        echo 'Vous n\'avez pas accès à cette section.';
+        echo '<br>';
+        echo '<a href="../home.php">Retour à l\'accueil</a>';
+        die();
+    }
+
+    require_once '../user/userDAO.php';
+    require_once '../database.php';
+
+    $database = new Database();
+    $userDAO = new UserDAO($database);
+    $user = $userDAO->getUserById($_SESSION['user_id']);
+
+    if (!$user->isAdmin()) {
+        echo 'Vous n\'avez pas accès à cette section.';
+        die();
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +52,6 @@
         <a href="dashboard_lieu.php">Lieux</a>
         <a href="dashboard_festivals.php">Festivals</a>
         <a href="dashboard_trajets.php">Trajets</a>
-        <a href="dashboard_vehicules.php">Véhicules</a>
     </header>
 </body>
 </html>

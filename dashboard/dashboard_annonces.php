@@ -10,8 +10,6 @@ require_once '../posts/annonce.php';
 require_once '../posts/annonceDAO.php';
 require_once '../posts/lieu.php';
 require_once '../posts/lieuDAO.php';
-require_once '../posts/vehicule.php';
-require_once '../posts/vehiculeDAO.php';
 
 $database = new Database();
 
@@ -20,7 +18,6 @@ $trajetDAO = new trajetDAO($database);
 $userDAO = new UserDAO($database);
 $festivalDAO = new festivalDAO($database);
 $lieuDAO = new LieuDAO($database);
-$vehiculeDAO = new VehiculeDAO($database);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['submit_annonce'])) { // modifier annonce
@@ -29,10 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trajetId = $_POST['trajet_id'];
         $festivalId = $_POST['festival_id'];
         $publicationDate = $_POST['publication_date'];
-        $vehiculeId = $_POST['vehicule_id'];
+        $voiture = $_POST['voiture'];
+        $nbPlaces = $_POST['nb_places'];
         $isEnabled = isset($_POST['isEnabled']) ? 1 : 0;
 
-        $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $vehiculeId, $isEnabled);
+        $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $voiture, $nbPlaces, $isEnabled);
         $annonce->setId($annonceId);
 
         $annonceDAO->updateAnnonce($annonce);
@@ -44,11 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trajetId = $_POST['new_trajet_id'];
         $festivalId = $_POST['new_festival_id'];
         $publicationDate = $_POST['new_publication_date'];
-        $vehiculeId = $_POST['new_vehicule_id'];
+        $voiture = $_POST['new_voiture'];
+        $nbPlaces = $_POST['new_nb_places'];
         $isEnabled = isset($_POST['new_isEnabled']) ? 1 : 0;
 
 
-        $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $vehiculeId, $isEnabled);
+        $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $voiture, $nbPlaces, $isEnabled);
         $annonceDAO->createAnnonce($annonce);
     }
 
@@ -73,7 +72,6 @@ $lieux = $lieuDAO->getAllLieux();
 $users = $userDAO->getAllUsers();
 $festivals = $festivalDAO->getAllFestivals();
 
-$vehicules = $vehiculeDAO->getAllVehicules();
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +98,8 @@ $vehicules = $vehiculeDAO->getAllVehicules();
             <th>Trajet</th>
             <th>Festival</th>
             <th>Date de publication</th>
-            <th>Véhicule</th>
+            <th>Voiture</th>
+            <th>Nombre de places</th>
             <th>isEnabled</th>
             <th>Actions</th>
         </tr>
@@ -142,16 +141,8 @@ $vehicules = $vehiculeDAO->getAllVehicules();
                         </select>
                     </td>
                     <td><input type="date" name="publication_date" value="<?= $annonce->getPublicationDate(); ?>"></td>
-                    <td>
-                        <select name="vehicule_id">
-                            <?php foreach ($vehicules as $vehicule) { ?>
-                                <option value="<?= $vehicule->getId(); ?>" <?php if ($vehicule->getId() == $annonce->getVehiculeId())
-                                      echo 'selected'; ?>>
-                                    <?= $vehicule->getMarque() . " " . $vehicule->getModele(); ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </td>
+                    <td><input type="text" name="voiture"value="<?= $annonce->getVoiture(); ?>"></td>
+                    <td><input type="number" name="nb_places" value="<?= $annonce->getNbPlaces(); ?>"></td>
                     <td><input type="checkbox" name="isEnabled" <?= $annonce->isEnabled() ? 'checked' : ''; ?>></td>
                     <td>
                         <input type="submit" name="submit_annonce" value="Modifier">
@@ -185,13 +176,8 @@ $vehicules = $vehiculeDAO->getAllVehicules();
                     </select>
                 </td>
                 <td><input type="date" name="new_publication_date"></td>
-                <td>
-                    <select name="new_vehicule_id">
-                        <?php foreach ($vehicules as $vehicule) { ?>
-                            <option value="<?= $vehicule->getId(); ?>"><?= $vehicule->getMarque() . " " . $vehicule->getModele(); ?></option>
-                        <?php } ?>
-                    </select>
-                </td>
+                <td><input type="text" name="new_voiture"></td>
+                <td><input type="number" name="new_nb_places"></td>
                 <td>
                     <input type="checkbox" name="new_isEnabled">
                 </td>

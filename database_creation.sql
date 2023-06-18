@@ -67,12 +67,12 @@ CREATE TABLE `festicar`.`annonces` (
   `trajet_id` INT NOT NULL,
   `publication_date` DATE NOT NULL,
   `festival_id` INT NOT NULL,
-  `vehicule_id` INT,
+  `voiture` VARCHAR(64) NOT NULL,
+  `nb_places` INT,
   `isEnabled` TINYINT(1) NOT NULL,
   FOREIGN KEY (`driver_id`) REFERENCES `users` (`user_id`),
   FOREIGN KEY (`trajet_id`) REFERENCES `trajets` (`trajet_id`),
   FOREIGN KEY (`festival_id`) REFERENCES `festivals` (`festival_id`),
-  FOREIGN KEY (`vehicule_id`) REFERENCES `festivals` (`vehicule_id`),
   PRIMARY KEY (`annonce_id`)
 );
 
@@ -89,17 +89,4 @@ CREATE TABLE `festicar`.`demandes` (
   FOREIGN KEY (`lieu_id`) REFERENCES `lieux` (`lieu_id`),
   FOREIGN KEY (`festival_id`) REFERENCES `festivals` (`festival_id`),
   PRIMARY KEY (`demande_id`)
-);
-
-
--- Table Vehicules
-CREATE TABLE `festicar`.`vehicules` (
-  `vehicule_id` INT NOT NULL AUTO_INCREMENT,
-  `driver_id` INT NOT NULL,
-  `marque` VARCHAR(128) NOT NULL,
-  `modele` VARCHAR(128) NOT NULL,
-  `couleur` VARCHAR(128) NOT NULL,
-  `nb_places` INT NOT NULL,
-  FOREIGN KEY (`driver_id`) REFERENCES `users` (`user_id`),
-  PRIMARY KEY (`vehicule_id`)
 );

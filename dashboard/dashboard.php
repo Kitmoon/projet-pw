@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <?php include_once('dashboard_header.php')?>
+    <?php include_once('dashboard_header.php') ?>
     <h1>FestiCar - Dashboard</h1>
     <a href="../home.php">Accueil</a>
 </body>

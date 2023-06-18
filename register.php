@@ -1,6 +1,6 @@
 <?php
-require_once '../database.php';
-require_once 'userDAO.php';
+require_once './database.php';
+require_once 'user/userDAO.php';
 
 $database = new Database();
 $userDAO = new UserDAO($database);
@@ -9,7 +9,7 @@ $userDAO = new UserDAO($database);
 // On vérifie si on est déjà connecté
 session_start();
 if (isset($_SESSION['user_id'])) {
-    header('Location: ../home.php');
+    header('Location: ./home.php');
     exit();
 }
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $userDAO->createUser($user);
 
-                header('Location: confirmation.php');
+                header('Location: user/confirmation.php');
                 exit();
             }
         }
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <h1>Inscription</h1>
-    <a href="../home.php">Accueil</a>
+    <a href="./home.php">Accueil</a>
 
 
     <?php if (isset($errorMessage)): ?>

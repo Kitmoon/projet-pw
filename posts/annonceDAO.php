@@ -15,15 +15,16 @@ class AnnonceDAO
   {
     $db = $this->database->getPDO();
 
-    $sql = "INSERT INTO annonces (festival_id, driver_id, trajet_id, publication_date, vehicule_id, isEnabled) VALUES (:festival_id, :driver_id, :trajet_id, :publication_date, :vehicule_id, :isEnabled)";
+    $sql = "INSERT INTO annonces (festival_id, driver_id, trajet_id, publication_date, voiture, nb_places, isEnabled) VALUES (:festival_id, :driver_id, :trajet_id, :publication_date, :voiture, :nb_places, :isEnabled)";
     $statement = $db->prepare($sql);
 
     $statement->execute([
-      'festival_id' => $annonce->getFestivalId(),
       'driver_id' => $annonce->getDriverId(),
       'trajet_id' => $annonce->getTrajetId(),
+      'festival_id' => $annonce->getFestivalId(),
       'publication_date' => $annonce->getPublicationDate(),
-      'vehicule_id' => $annonce->getVehiculeId(),
+      'voiture' => $annonce->getVoiture(),
+      'nb_places' => $annonce->getNbPlaces(),
       'isEnabled' => $annonce->isEnabled()
     ]);
 
@@ -46,7 +47,7 @@ class AnnonceDAO
     $db = null;
 
     if ($annonceData) {
-      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['vehicule_id'], $annonceData['isEnabled']);
+      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['voiture'], $annonceData['nb_places'], $annonceData['isEnabled']);
       $annonce->setId($annonceData['annonce_id']);
       return $annonce;
     }
@@ -70,7 +71,7 @@ class AnnonceDAO
     $annonces = [];
 
     foreach ($annoncesData as $annonceData) {
-      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['vehicule_id'], $annonceData['isEnabled']);
+      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['voiture'], $annonceData['nb_places'], $annonceData['isEnabled']);
       $annonce->setId($annonceData['annonce_id']);
       $annonces[] = $annonce;
     }
@@ -80,7 +81,7 @@ class AnnonceDAO
 
   public function updateAnnonce($annonce)
   {
-    $sql = "UPDATE annonces SET driver_id = :driver_id, trajet_id = :trajet_id, festival_id = :festival_id, publication_date = :publication_date, vehicule_id = :vehicule_id, isEnabled = :isEnabled WHERE annonce_id = :annonce_id";
+    $sql = "UPDATE annonces SET driver_id = :driver_id, trajet_id = :trajet_id, festival_id = :festival_id, publication_date = :publication_date, voiture = :voiture, nb_places = :nb_places, isEnabled = :isEnabled WHERE annonce_id = :annonce_id";
     $statement = $this->database->prepare($sql);
 
     $statement->execute([
@@ -89,7 +90,8 @@ class AnnonceDAO
       'trajet_id' => $annonce->getTrajetId(),
       'festival_id' => $annonce->getFestivalId(),
       'publication_date' => $annonce->getPublicationDate(),
-      'vehicule_id' => $annonce->getVehiculeId(),
+      'voiture' => $annonce->getVoiture(),
+      'nb_places' => $annonce->getNbPlaces(),
       'isEnabled' => $annonce->isEnabled()
     ]);
   }
@@ -120,7 +122,7 @@ class AnnonceDAO
     $annonces = [];
 
     foreach ($annoncesData as $annonceData) {
-      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['vehicule_id'], $annonceData['isEnabled']);
+      $annonce = new Annonce($annonceData['driver_id'], $annonceData['trajet_id'], $annonceData['festival_id'], $annonceData['publication_date'], $annonceData['voiture'], $annonceData['nb_places'], $annonceData['isEnabled']);
       $annonce->setId($annonceData['annonce_id']);
       $annonces[] = $annonce;
     }

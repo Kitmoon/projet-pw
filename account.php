@@ -7,8 +7,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once '../database.php';
-require_once 'userDAO.php';
+require_once './database.php';
+require_once 'user/userDAO.php';
 
 $database = new Database();
 $userDAO = new UserDAO($database);
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $user->setPassword($hashedPassword);
         $userDAO->updateUser($user);
-        header('Location: ../home.php');
+        header('Location: ./home.php');
         exit();
     } else {
         $error = "Le mot de passe doit contenir au moins 8 caractères";
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>FestiCar - Mon Compte</title>
 </head>
 <body>
-    <a href="../home.php">Accueil</a>
+    <?php include_once('./header.php'); ?>
     <h1>Mon Compte</h1>
     <?php if (!empty($error)) : ?>
     <p><?php echo htmlspecialchars($error); ?></p>
