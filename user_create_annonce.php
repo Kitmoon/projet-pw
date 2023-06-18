@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // On récupère le lieu créé
         $newLieu = findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
 
-        debug_to_console("newLieu : " . $newLieu->getAdresse());
+        debug_to_console("newLieu : " . $newLieu->getNom());
 
 
         $festivalId = $_POST['new_festival_id'];
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-        $dateDepart = $_POST['new_date_depart'];
+        $dateDepart = date("Y-m-d H:i:s", strtotime($_POST['new_date_depart']));;
 
         $publicationDate = $_POST['new_publication_date'];
         $voiture = $_POST['new_voiture'];
@@ -108,9 +108,11 @@ function findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCod
     debug_to_console("Lieu non trouvé : " . $lieuNom);
     $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
     $lieuDAO->createLieu($newLieu);
+    
+    $lieux = $lieuDAO->getAllLieux();
     foreach ($lieux as $lieu) {
         debug_to_console("Lieu en recherche actuellement : " . $lieu->getNom());
-        if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
+        if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
             debug_to_console("Lieu créé puis trouvé : " . $lieu->getId());
             return $lieu;
         }
@@ -131,9 +133,12 @@ function findTrajet($trajets, $trajetDAO, $festivalId, $driverId, $dateDepart, $
     // il n'existe pas donc on le crée
     $trajetNew = new Trajet($festivalId, $driverId, $dateDepart, $newLieu->getId(), $lieuArriveeId, $prix, $description);
     $trajetDAO->createTrajet($trajetNew);
+    // On récupère la liste mise à jour (j'ai bloqué pendant 3h parce que j'avais pas mis à jour...)
+    $trajets = $trajetDAO->getAllTrajets();
     debug_to_console("Trajet non trouvé, le festival : " . $festivalId);
     foreach ($trajets as $trajet) {
         debug_to_console("Trajet recherche : " . $trajet->getId());
+        debug_to_console("On a  : " . $trajet->getDateDepart(). " et on cherche : " . $dateDepart);
         if ($trajet->getDriverId() == $driverId && $trajet->getDateDepart() == $dateDepart) {
             debug_to_console("Trajet créé puis trouvé : " . $trajet->getId());
             return $trajet->getId();
@@ -174,7 +179,7 @@ function findTrajet($trajets, $trajetDAO, $festivalId, $driverId, $dateDepart, $
             </select><br>
 
             <label for="new_date_depart">Date de départ : </label>
-            <input type="date" name="new_date_depart" id="new_date_depart"><br>
+            <input type="date" name="new_date_depart" id="new_date_depart" value="<?= date("Y-m-d") ?>;"><br>
 
             <input type="hidden" name="new_publication_date" id="new_publication_date" value="<?= date("Y-m-d") ?>;">
 
