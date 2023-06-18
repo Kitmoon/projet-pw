@@ -6,13 +6,17 @@ class Demande {
   private $publication_date;
   private $festival_id;
   private $isEnabled;
+  private $date_depart;
+  private $date_retour;
 
-  public function __construct($author_id, $lieu_id, $publication_date, $festival_id, $isEnabled) {
+  public function __construct($author_id, $lieu_id, $publication_date, $festival_id, $isEnabled, $date_depart, $date_retour) {
     $this->author_id = $author_id;
     $this->lieu_id = $lieu_id;
     $this->festival_id = $festival_id;
     $this->publication_date = $publication_date;
     $this->isEnabled = $isEnabled;
+    $this->date_depart = $date_depart;
+    $this->date_retour = $date_retour;
   }
 
   public function getId() {
@@ -52,6 +56,23 @@ class Demande {
 
   public function setPublicationDate($publication_date) {
     $this->publication_date = $publication_date;
+  }
+
+
+  public function getDateDepart() {
+    return $this->date_depart;
+  }
+
+  public function setDateDepart($date_depart) {
+    $this->date_depart = $date_depart;
+  }
+
+  public function getDateRetour() {
+    return $this->date_retour;
+  }
+
+  public function setDateRetour($date_retour) {
+    $this->date_retour = $date_retour;
   }
 
   public function isEnabled() {

@@ -27,8 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $publicationDate = $_POST['publication_date'];
         $festivalId = $_POST['festival_id'];
         $isEnabled = isset($_POST['isEnabled']) ? 1 : 0;
+        $dateDepart = $_POST['date_depart'];
+        $dateRetour = $_POST['date_retour'];
 
-        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, $isEnabled);
+        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, $isEnabled, $dateDepart, $dateRetour);
         $demande->setId($demandeId);
 
         $demandeDAO->updateDemande($demande);
@@ -41,9 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $publicationDate = $_POST['new_publication_date'];
         $festivalId = $_POST['new_festival_id'];
         $isEnabled = isset($_POST['new_isEnabled']) ? 1 : 0;
+        $dateDepart = $_POST['new_date_depart'];
+        $dateRetour = $_POST['new_date_retour'];
 
 
-        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, $isEnabled);
+        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, $isEnabled, $dateDepart, $dateRetour);
         $demandeDAO->createDemande($demande);
     }
 
@@ -95,6 +99,8 @@ $festivals = $festivalDAO->getAllFestivals();
             <th>Festival</th>
             <th>Date de publication</th>
             <th>isEnabled</th>
+            <th>Date départ</th>
+            <th>Date retour</th>
             <th>Actions</th>
         </tr>
         <?php foreach ($demandes as $demande) { ?>
@@ -136,6 +142,8 @@ $festivals = $festivalDAO->getAllFestivals();
                     </td>
                     <td><input type="date" name="publication_date" value="<?= $demande->getPublicationDate(); ?>"></td>
                     <td><input type="checkbox" name="isEnabled" <?= $demande->isEnabled() ? 'checked' : ''; ?>></td>
+                    <td><input type="date" name="date_depart" value="<?= $demande->getDateDepart(); ?>"></td>
+                    <td><input type="date" name="date_retour" value="<?= $demande->getDateRetour(); ?>"></td>
                     <td>
                         <input type="submit" name="submit_demande" value="Modifier">
                         <input type="submit" name="delete_demande_id[]" value="Supprimer">
@@ -171,6 +179,9 @@ $festivals = $festivalDAO->getAllFestivals();
                 <td>
                     <input type="checkbox" name="new_isEnabled">
                 </td>
+                
+                <td><input type="date" name="new_date_depart"></td>
+                    <td><input type="date" name="new_date_retour"></td>
                 <td>
                     <input type="submit" name="submit_add_demande" value="Ajouter">
                 </td>

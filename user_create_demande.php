@@ -15,22 +15,22 @@ require_once './user/user.php';
 require_once './user/userDAO.php';
 require_once './posts/festival.php';
 require_once './posts/festivalDAO.php';
-require_once './posts/annonce.php';
-require_once './posts/annonceDAO.php';
+require_once './posts/demande.php';
+require_once './posts/demandeDAO.php';
 require_once './posts/lieu.php';
 require_once './posts/lieuDAO.php';
 
 $database = new Database();
 
-$annonceDAO = new AnnonceDAO($database);
+$demandeDAO = new DemandeDAO($database);
 $trajetDAO = new trajetDAO($database);
 $userDAO = new UserDAO($database);
 $festivalDAO = new festivalDAO($database);
 $lieuDAO = new LieuDAO($database);
 
 
-// Récupération de toutes les annonces
-$annonces = $annonceDAO->getAllAnnonces();
+// Récupération de toutes les demandes
+$demandes = $demandeDAO->getAllDemandes();
 
 $trajets = $trajetDAO->getAllTrajets();
 
@@ -40,43 +40,10 @@ $lieux = $lieuDAO->getAllLieux();
 $users = $userDAO->getAllUsers();
 $festivals = $festivalDAO->getAllFestivals();
 
-function findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal) {
-    foreach ($lieux as $lieu) {
-        if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
-            return $lieu;
-        } else {
-            $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
-            $lieuDAO->createLieu($newLieu);
-            foreach ($lieux as $lieu) {
-                if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
-                    return $lieu;
-                }
-            }
-        }
-    }
-    return new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
-}
-
-function findTrajet($trajets, $trajetDAO, $festivalId, $driverId, $dateDepart, $newLieu, $lieuArriveeId, $prix, $description) {
-    foreach ($trajets as $trajet) {
-        if ($trajet->getDriverId() == $driverId || $trajet->getDateDepart() == $dateDepart) {
-            return $trajet->getId();
-        } else {
-            $trajetNew = new Trajet($festivalId, $driverId, $dateDepart, $newLieu->getId(), $lieuArriveeId, $prix, $description);
-            $trajetDAO->createTrajet($trajetNew);
-            foreach ($trajets as $trajet) {
-                if ($trajet->getDriverId() == $driverId || $trajet->getDateDepart() == $dateDepart) {
-                    return $trajet->getId();
-                }
-            }
-
-        }
-    }
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['submit_add_annonce'])) { // Ajouter annonce
-        $driverId = $_POST['new_driver_id'];
+    if (isset($_POST['submit_add_demande'])) { // Ajouter demande
+        $authorId = $_POST['new_author_id'];
 
         // Création d'un lieu à partir des infos
         $lieuNom = $_POST['new_adresse_depart'];
@@ -85,7 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lieuCodePostal = $_POST['new_code_postal_depart'];
 
         // On récupère le lieu créé
-        $newLieu = findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+        foreach ($lieux as $lieu) {
+            if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
+                $newLieu = $lieu;
+            } else {
+                $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+                $lieuDAO->createLieu($newLieu);
+                foreach ($lieux as $lieu) {
+                    if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
+                        $newLieu = $lieu;
+                    }
+                }
+
+            }
+        }
 
 
         $festivalId = $_POST['new_festival_id'];
@@ -98,22 +78,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
+
         $dateDepart = $_POST['new_date_depart'];
 
         $publicationDate = $_POST['new_publication_date'];
         $voiture = $_POST['new_voiture'];
         $nbPlaces = $_POST['new_nb_places'];
-
+        
 
         $prix = $_POST['new_prix'];
         $description = $_POST['new_description'];
 
-        // On cherche le trajet
-        $trajetId = findTrajet($trajets, $trajetDAO, $festivalId, $driverId, $dateDepart, $newLieu, $lieuArriveeId, $prix, $description); 
 
 
-        $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $voiture, $nbPlaces, 1);
-        $annonceDAO->createAnnonce($annonce);
+        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, 1, $dateDepart, $dateRetour);
+        $demandeDAO->createDemande($demande);
     }
 }
 ?>
@@ -122,14 +101,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 
 <head>
-    <title>Ajouter une annonce</title>
+    <title>Ajouter une demande</title>
 </head>
 
 <body>
     <?php include_once('./header.php'); ?>
-    <h2>Ajouter une annonce</h2>
+    <h2>Ajouter une demande</h2>
     <form method="post" action="">
-        <input type="hidden" name="new_driver_id" value="<?= $_SESSION['user_id']; ?>">
+        <input type="hidden" name="new_author_id" value="<?= $_SESSION['user_id']; ?>">
 
         <label for="new_adresse_depart">Adresse : </label>
         <input type="text" name="new_adresse_depart" id="new_adresse_depart"><br>
@@ -138,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="new_ville_depart" id="new_ville_depart"><br>
 
         <label for="new_code_postal_depart">Code postal : </label>
-        <input type="number" name="new_code_postal_depart" id="new_code_postal_depart"><br>
+        <input type="text" name="new_code_postal_depart" id="new_code_postal_depart"><br>
 
         <label for="new_festival_id">Festival : </label>
         <select name="new_festival_id" id="new_festival_id">
@@ -160,11 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="new_nb_places">Nombre de places : </label>
         <input type="number" name="new_nb_places" id="new_nb_places"><br>
 
-        <label for="new_prix">Prix : </label>
-        <input type="number" name="new_prix" id="new_prix"><br>
-        <input type="hidden" name="new_description" id="new_description">
-
-        <input type="submit" name="submit_add_annonce" value="Ajouter">
+        <input type="submit" name="submit_add_demande" value="Ajouter">
     </form>
 </body>
 

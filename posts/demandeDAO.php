@@ -15,7 +15,7 @@ class DemandeDAO
   {
     $db = $this->database->getPDO();
 
-    $sql = "INSERT INTO demandes (author_id, lieu_id, publication_date, festival_id, isEnabled) VALUES (:author_id, :lieu_id, :publication_date, :festival_id, :isEnabled)";
+    $sql = "INSERT INTO demandes (author_id, lieu_id, publication_date, festival_id, isEnabled, date_depart, date_retour) VALUES (:author_id, :lieu_id, :publication_date, :festival_id, :isEnabled, :date_depart, :date_retour)";
     $statement = $db->prepare($sql);
 
     $statement->execute([
@@ -23,7 +23,9 @@ class DemandeDAO
       'lieu_id' => $demande->getLieuId(),
       'publication_date' => $demande->getPublicationDate(),
       'festival_id' => $demande->getFestivalId(),
-      'isEnabled' => $demande->isEnabled()
+      'isEnabled' => $demande->isEnabled(),
+      'date_depart' => $demande->getDateDepart(),
+      'date_retour' => $demande->getDateRetour()
     ]);
 
     $db = null;
@@ -45,7 +47,7 @@ class DemandeDAO
     $db = null;
 
     if ($demandeData) {
-      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled']);
+      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled'], $demandeData['date_depart'], $demandeData['date_retour']);
       $demande->setId($demandeData['demande_id']);
       return $demande;
     }
@@ -69,7 +71,7 @@ class DemandeDAO
     $demandes = [];
 
     foreach ($demandesData as $demandeData) {
-      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled']);
+      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled'], $demandeData['date_depart'], $demandeData['date_retour']);
       $demande->setId($demandeData['demande_id']);
       $demandes[] = $demande;
     }
@@ -79,7 +81,7 @@ class DemandeDAO
 
   public function updateDemande($demande)
   {
-    $sql = "UPDATE demandes SET author_id = :author_id, lieu_id = :lieu_id, publication_date = :publication_date, festival_id = :festival_id, isEnabled = :isEnabled WHERE demande_id = :demande_id";
+    $sql = "UPDATE demandes SET author_id = :author_id, lieu_id = :lieu_id, publication_date = :publication_date, festival_id = :festival_id, isEnabled = :isEnabled, date_depart = :date_depart, date_retour = :date_retour WHERE demande_id = :demande_id";
     $statement = $this->database->prepare($sql);
 
     $statement->execute([
@@ -88,7 +90,9 @@ class DemandeDAO
       'lieu_id' => $demande->getLieuId(),
       'publication_date' => $demande->getPublicationDate(),
       'festival_id' => $demande->getFestivalId(),
-      'isEnabled' => $demande->isEnabled()
+      'isEnabled' => $demande->isEnabled(),
+      'date_depart' => $demande->getDateDepart(),
+      'date_retour' => $demande->getDateRetour()
     ]);
   }
 
@@ -118,7 +122,7 @@ class DemandeDAO
     $demandes = [];
 
     foreach ($demandesData as $demandeData) {
-      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled']);
+      $demande = new Demande($demandeData['author_id'], $demandeData['lieu_id'], $demandeData['publication_date'], $demandeData['festival_id'], $demandeData['isEnabled'], $demandeData['date_depart'], $demandeData['date_retour']);
       $demande->setId($demandeData['demande_id']);
       $demandes[] = $demande;
     }
