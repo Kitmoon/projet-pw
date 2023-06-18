@@ -52,20 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lieuCodePostal = $_POST['new_code_postal_depart'];
 
         // On récupère le lieu créé
-        foreach ($lieux as $lieu) {
-            if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
-                $newLieu = $lieu;
-            } else {
-                $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
-                $lieuDAO->createLieu($newLieu);
-                foreach ($lieux as $lieu) {
-                    if ($lieu->getAdresse() == $lieuAdresse || $lieu->getCodePostal() == $lieuCodePostal) {
-                        $newLieu = $lieu;
-                    }
-                }
-
-            }
-        }
+        $newLieu = findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
 
 
         $festivalId = $_POST['new_festival_id'];
@@ -79,17 +66,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-        $dateDepart = $_POST['new_date_depart'];
-        $dateRetour = $_POST['new_date_retour'];
+        $dateDepart = date("Y-m-d H:i:s", strtotime($_POST['new_date_depart']));
+        $dateRetour = date("Y-m-d H:i:s", strtotime($_POST['new_date_retour']));
 
         $publicationDate = $_POST['new_publication_date'];
 
 
 
-        $demande = new Demande($authorId, $lieuId, $publicationDate, $festivalId, 1, $dateDepart, $dateRetour);
+        $demande = new Demande($authorId, $newLieu->getId(), $publicationDate, $festivalId, 1, $dateDepart, $dateRetour);
         $demandeDAO->createDemande($demande);
     }
 }
+
+function findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal)
+{
+    foreach ($lieux as $lieu) {
+        if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+            debug_to_console("Lieu trouvé : " . $lieu->getId());
+            return $lieu;
+        }
+    }
+    debug_to_console("Lieu non trouvé : " . $lieuNom);
+    $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+    $lieuDAO->createLieu($newLieu);
+    
+    $lieux = $lieuDAO->getAllLieux();
+    foreach ($lieux as $lieu) {
+        debug_to_console("Lieu en recherche actuellement : " . $lieu->getNom());
+        if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+            debug_to_console("Lieu créé puis trouvé : " . $lieu->getId());
+            return $lieu;
+        }
+    }
+}
+
+
+
+function debug_to_console($data)
+{
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('" . $output . "');</script>";
+}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -125,15 +149,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="new_date_depart">Date de départ : </label>
             <input type="date" name="new_date_depart" id="new_date_depart"><br>
 
+            <label for="new_date_depart">Date de retour : </label>
+            <input type="date" name="new_date_retour" id="new_date_retour"><br>
+
             <input type="hidden" name="new_publication_date" id="new_publication_date" value="<?= date("Y-m-d") ?>;">
-
-
-
-            <label for="new_voiture">Véhicule : </label>
-            <input type="text" name="new_voiture" id="new_voiture"><br>
-
-            <label for="new_nb_places">Nombre de places : </label>
-            <input type="number" name="new_nb_places" id="new_nb_places"><br>
 
             <input type="submit" name="submit_add_demande" value="Ajouter">
         </form>

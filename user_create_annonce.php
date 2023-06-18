@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-        $dateDepart = date("Y-m-d H:i:s", strtotime($_POST['new_date_depart']));;
+        $dateDepart = date("Y-m-d H:i:s", strtotime($_POST['new_date_depart']));
 
         $publicationDate = $_POST['new_publication_date'];
         $voiture = $_POST['new_voiture'];
