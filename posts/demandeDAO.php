@@ -129,5 +129,84 @@ class DemandeDAO
 
     return $demandes;
   }
+
+
+  public function searchDemandes($lieuAdresse, $lieuVille, $lieuCodePostal, $festivalId, $dateDepart): array
+  {
+    $lieuNom = $lieuAdresse;
+
+    $lieuDAO = new LieuDAO($this->database);
+    $lieux = $lieuDAO->getAllLieux();
+
+    $newLieu = findLieuNew($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+
+    $datePublication = $dateDepart;
+
+    $query = "SELECT * FROM demandes WHERE 1=1"; // pour éviter les erreurs
+
+    if ($newLieu != null) {
+      $query .= " AND lieu_id = :lieu_id";
+    }
+
+    if ($festivalId != null) {
+      $query .= " AND festival_id = :festival_id";
+    }
+
+    if ($datePublication != null) {
+      $query .= " AND publication_date = :publication_date";
+    }
+
+    debug_to_console("SQL : " . $query);
+
+
+    $statement = $this->database->prepare($query);
+
+    if ($newLieu != null) {
+      $statement->bindValue(':lieu_id', $newLieu->getId());
+    }
+
+    if ($festivalId != null) {
+      $statement->bindValue(':festival_id', $festivalId);
+    }
+
+    if ($datePublication != null) {
+      $statement->bindValue(':publication_date', $datePublication);
+    }
+
+    $statement->execute();
+
+    $demandes = [];
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+      $demande = new Demande($row['author_id'], $row['lieu_id'], $row['publication_date'], $row['festival_id'], $row['isEnabled'], $row['date_depart'], $row['date_retour']);
+      $demande->setId($row['demande_id']);
+      $demandes[] = $demande;
+    }
+
+    return $demandes;
+  }
+
 }
+
+function findLieuNew($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal)
+{
+  foreach ($lieux as $lieu) {
+    if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+      debug_to_console("Lieu trouvé : " . $lieu->getId());
+      return $lieu;
+    }
+  }
+  debug_to_console("Lieu non trouvé : " . $lieuNom);
+  $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+  $lieuDAO->createLieu($newLieu);
+
+  $lieux = $lieuDAO->getAllLieux();
+  foreach ($lieux as $lieu) {
+    debug_to_console("Lieu en recherche actuellement : " . $lieu->getNom());
+    if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+      debug_to_console("Lieu créé puis trouvé : " . $lieu->getId());
+      return $lieu;
+    }
+  }
+}
+
 ?>

@@ -35,7 +35,7 @@ function displayAnnonces(array $annonces, string $style)
     $output = '';
     if ($style == 'full') {
         foreach ($annonces as $annonce) {
-            $output = $output . displayAnnonceFull($annonce) . '<br>';
+            $output = $output . displayAnnonceHome($annonce) . '<br>';
         }
     } else {
         foreach ($annonces as $annonce) {
@@ -46,61 +46,81 @@ function displayAnnonces(array $annonces, string $style)
     return $output;
 }
 
+
 function displayAnnonceHome(Annonce $annonce)
 {
     global $users;
     global $festivals;
     global $trajets;
 
-    $output = "<table>";
-    foreach ($users as $user) {
-        if ($user->getId() == $annonce->getDriverId()) {
-            $output = $output . '<tr><td>' . $user->getPrenom() . " " . $user->getNom() . "</td></tr>";
+    $output = "<aside>";
+          
+    foreach ($festivals as $festival) {
+        if ($festival->getId() == $annonce->getFestivalId()) {
+            $output = $output . '<h3>' . displayFestival($festival) . "</h3>";
         }
     }
 
-    foreach ($festivals as $festival) {
-        if ($festival->getId() == $annonce->getFestivalId()) {
-            $output = $output . '<tr><td>' . displayFestival($festival) . "</td></tr>";
+    foreach ($users as $user) {
+        if ($user->getId() == $annonce->getDriverId()) {
+            $output = $output . '<p>' . $user->getPrenom() . " " . $user->getNom() . "</p>";
         }
     }
 
     foreach ($trajets as $trajet) {
         if ($trajet->getId() == $annonce->getTrajetId()) {
-            $output = $output . '<tr><td>' . displayTrajet($trajet) . "</td></tr>";
+            $output = $output . '<p><small>' . displayTrajet($trajet) . "</small></p>";
         }
     }
 
-    return $output."</table>";
+    return $output."</aside>";
 }
 
 
-function displayAnnonceFull(Annonce $annonce)
+function displayDemandes(array $demandes, string $style)
+{
+    $output = '';
+    if ($style == 'full') {
+        foreach ($demandes as $demande) {
+            $output = $output . displayDemandeHome($demande) . '<br>';
+        }
+    } else {
+        foreach ($demandes as $demande) {
+            $output = $output . displayDemandeHome($demande) . '<br>';
+        }
+    }
+
+    return $output;
+}
+
+
+function displayDemandeHome(Demande $demande)
 {
     global $users;
     global $festivals;
-    global $trajets;
+    global $lieux;
 
-    $output = "<table>";
-    foreach ($users as $user) {
-        if ($user->getId() == $annonce->getDriverId()) {
-            $output = $output . '<tr><td>' . $user->getPrenom() . " " . $user->getNom() . "</td></tr>";
-        }
-    }
-
+    $output = "<aside>";
+          
     foreach ($festivals as $festival) {
-        if ($festival->getId() == $annonce->getFestivalId()) {
-            $output = $output . '<tr><td>' . displayFestival($festival) . "</td></tr>";
+        if ($festival->getId() == $demande->getFestivalId()) {
+            $output = $output . '<h3>' . displayFestival($festival) . "</h3>";
         }
     }
 
-    foreach ($trajets as $trajet) {
-        if ($trajet->getId() == $annonce->getTrajetId()) {
-            $output = $output . '<tr><td>' . displayTrajet($trajet) . "</td></tr>";
+    foreach ($users as $user) {
+        if ($user->getId() == $demande->getAuthorId()) {
+            $output = $output . '<p>' . $user->getPrenom() . " " . $user->getNom() . "</p>";
         }
     }
 
-    return $output."</table>";
+    foreach ($lieux as $lieu) {
+        if ($lieu->getId() == $demande->getLieuId()) {
+            $output = $output . '<p><small>' . displayLieuDet($lieu) . "</small></p>";
+        }
+    }
+
+    return $output."</aside>";
 }
 
 
@@ -130,6 +150,13 @@ function displayLieu(Lieu $lieu)
 {
     $output = "";
     $output = $lieu->getAdresse();
+    return $output;
+}
+
+function displayLieuDet(Lieu $lieu)
+{
+    $output = "";
+    $output = $lieu->getVille() . " " . $lieu->getCodePostal();
     return $output;
 }
 

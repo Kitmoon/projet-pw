@@ -14,19 +14,29 @@
 
 <body>
     <?php include_once('./header.php'); ?>
+    <header>
+    <p><a href="./search_annonce.php"><i>Rechercher des trajets</i></a><a href="./search_demande.php"><b>Trouver des festivaliers &rarr;</b></a></p>
+    </header>
     <main>
-        <h2>Liste des annonces :</h2>
-        <?php
+    <hr>
+        <section>
+            <header>
+                <h2>Liste des annonces</h2>
+                <p>Rendez-vous à votre festival préféré en respectant la nature !</p>
+            </header>
+            <?php
 
-        require_once './database.php';
-        require_once './posts/annonce.php';
-        require_once './posts/annonceDAO.php';
-        require_once './display.php';
-        $database = new Database();
-        $annonceDAO = new AnnonceDAO($database);
-        $annonces = $annonceDAO->getAllAnnonces();
-        echo displayAnnonces($annonces, 'home');
-        ?>
+            require_once './database.php';
+            require_once './posts/annonce.php';
+            require_once './posts/annonceDAO.php';
+            require_once './display.php';
+            $database = new Database();
+            $annonceDAO = new AnnonceDAO($database);
+            $annonces = $annonceDAO->getAllAnnonces();
+            echo displayAnnonces($annonces, 'home');
+            ?>
+        </section>
+
     </main>
 </body>
 

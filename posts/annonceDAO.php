@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/../database.php';
-require_once('annonce.php');
+require_once __DIR__ . '/annonce.php';
+require_once __DIR__ . '/lieu.php';
+require_once __DIR__ . '/lieuDAO.php';
+require_once __DIR__ . '/festival.php';
+require_once __DIR__ . '/festivalDAO.php';
+require_once __DIR__ . '/trajet.php';
+require_once __DIR__ . '/trajetDAO.php';
 
 class AnnonceDAO
 {
@@ -53,6 +59,65 @@ class AnnonceDAO
     }
 
     return null;
+  }
+
+  public function searchAnnonces($lieuAdresse, $lieuVille, $lieuCodePostal, $festivalId, $dateDepart): array
+  {
+    $lieuNom = $lieuAdresse;
+
+    $trajetDAO = new trajetDAO($this->database);
+    $lieuDAO = new LieuDAO($this->database);
+
+    $trajets = $trajetDAO->getAllTrajets();
+    $lieux = $lieuDAO->getAllLieux();
+
+    $newLieu = findLieuGet($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+
+    $trajetId = findTrajetLieu($trajets, $dateDepart, $newLieu);
+
+    $datePublication = $dateDepart;
+
+    $query = "SELECT * FROM annonces WHERE 1=1"; // pour éviter les erreurs
+
+    if ($trajetId != null) {
+      $query .= " AND trajet_id = :trajet_id";
+    }
+
+    if ($festivalId != null) {
+      $query .= " AND festival_id = :festival_id";
+    }
+
+    if ($datePublication != null) {
+      $query .= " AND publication_date = :publication_date";
+    }
+
+    debug_to_console("SQL : " . $query);
+
+
+    $statement = $this->database->prepare($query);
+
+    if ($trajetId != null) {
+      $statement->bindValue(':trajet_id', $trajetId);
+    }
+
+    if ($festivalId != null) {
+      $statement->bindValue(':festival_id', $festivalId);
+    }
+
+    if ($datePublication != null) {
+      $statement->bindValue(':publication_date', $datePublication);
+    }
+
+    $statement->execute();
+
+    $annonces = [];
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+      $annonce = new Annonce($row['driver_id'], $row['trajet_id'], $row['festival_id'], $row['publication_date'], $row['voiture'], $row['nb_places'], $row['is_enabled']);
+      $annonce->setId($row['id']);
+      $annonces[] = $annonce;
+    }
+
+    return $annonces;
   }
 
   public function getAllAnnonces()
@@ -130,4 +195,40 @@ class AnnonceDAO
     return $annonces;
   }
 }
+
+function findLieuGet($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal)
+{
+    foreach ($lieux as $lieu) {
+        if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+            debug_to_console("Lieu trouvé : " . $lieu->getId());
+            return $lieu;
+        }
+    }
+    debug_to_console("Lieu non trouvé : " . $lieuNom);
+    $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
+    $lieuDAO->createLieu($newLieu);
+
+    $lieux = $lieuDAO->getAllLieux();
+    foreach ($lieux as $lieu) {
+        debug_to_console("Lieu en recherche actuellement : " . $lieu->getNom());
+        if ($lieu->getAdresse() == $lieuAdresse && $lieu->getCodePostal() == $lieuCodePostal) {
+            debug_to_console("Lieu créé puis trouvé : " . $lieu->getId());
+            return $lieu;
+        }
+    }
+}
+
+function findTrajetLieu($trajets, $dateDepart, $newLieu)
+{
+    // On vérifie si le trajet existe déjà ou non
+    foreach ($trajets as $trajet) {
+        debug_to_console("Trajet en recherche : " . $dateDepart);
+        if ($trajet->getLieuDepart() == $newLieu->getId() && $trajet->getDateDepart() == $dateDepart) {
+            debug_to_console("Trajet trouvé : " . $trajet->getId());
+            return $trajet->getId();
+        }
+    }
+    return null;
+}
+
 ?>

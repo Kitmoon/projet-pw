@@ -93,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $annonce = new Annonce($driverId, $trajetId, $festivalId, $publicationDate, $voiture, $nbPlaces, 1);
         $annonceDAO->createAnnonce($annonce);
+        header('Location: user/confirmation.php');
+        exit();
     }
 }
 
@@ -108,7 +110,7 @@ function findLieu($lieux, $lieuDAO, $lieuNom, $lieuAdresse, $lieuVille, $lieuCod
     debug_to_console("Lieu non trouvé : " . $lieuNom);
     $newLieu = new Lieu($lieuNom, $lieuAdresse, $lieuVille, $lieuCodePostal);
     $lieuDAO->createLieu($newLieu);
-    
+
     $lieux = $lieuDAO->getAllLieux();
     foreach ($lieux as $lieu) {
         debug_to_console("Lieu en recherche actuellement : " . $lieu->getNom());
@@ -138,7 +140,7 @@ function findTrajet($trajets, $trajetDAO, $festivalId, $driverId, $dateDepart, $
     debug_to_console("Trajet non trouvé, le festival : " . $festivalId);
     foreach ($trajets as $trajet) {
         debug_to_console("Trajet recherche : " . $trajet->getId());
-        debug_to_console("On a  : " . $trajet->getDateDepart(). " et on cherche : " . $dateDepart);
+        debug_to_console("On a  : " . $trajet->getDateDepart() . " et on cherche : " . $dateDepart);
         if ($trajet->getDriverId() == $driverId && $trajet->getDateDepart() == $dateDepart) {
             debug_to_console("Trajet créé puis trouvé : " . $trajet->getId());
             return $trajet->getId();
